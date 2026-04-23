@@ -126,12 +126,3 @@ Les contributions sont les bienvenues !
 ## 📄 Licence
 
 Ce projet est sous licence MIT.
-
-## 🙏 Remerciements
-
-- Inspiré par la mythologie nordique et Völundr (Wayland le Forgeron)
-- Logo créé avec passion pour la forge
-
----
-
-**Fait avec ⚒️ par la communauté - Forgé comme Völundr**
