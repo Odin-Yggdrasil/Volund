@@ -1,0 +1,73 @@
+/* VOLUND - Thème Dark */
+
+:root {
+    --primary: #4a9eff;
+    --secondary: #ffa500;
+    --accent: #b744ff;
+    --danger: #ff4757;
+    --success: #2ecc71;
+    --bg-main: #0d1117;
+    --bg-panel: #161b22;
+    --bg-card: #21262d;
+    --text-primary: #c9d1d9;
+    --text-secondary: #8b949e;
+}
+
+body {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+}
+
+body::before {
+    display: none;
+}
+
+.panel {
+    background: rgba(22, 27, 34, 0.8);
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a9eff, #2c5aa0);
+}
+
+.quick-action-btn {
+    background: #21262d;
+    border: 1px solid #4a9eff;
+}
+
+.quick-action-btn:hover {
+    background: rgba(74, 158, 255, 0.2);
+}
+
+.preseed-item {
+    background: #21262d;
+}
+
+.preseed-item:hover {
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.preseed-item.active {
+    background: rgba(74, 158, 255, 0.2);
+    border-left-color: #4a9eff;
+}
+
+.code-editor {
+    background: #0d1117;
+    border: 1px solid rgba(74, 158, 255, 0.3);
+}
+
+h1 {
+    text-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+    animation: none;
+}
+
+.section-title::after {
+    box-shadow: none;
+}
+
+.stat-value {
+    text-shadow: none;
+    animation: none;
+}

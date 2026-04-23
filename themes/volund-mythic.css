@@ -1,0 +1,481 @@
+/* VOLUND - Thème Mythologique Nordique */
+/* Inspiré de Völundr (Wayland le Forgeron) et de la mythologie nordique */
+
+:root {
+    --primary: #d4af37;        /* Or de Völundr */
+    --secondary: #778899;      /* Acier de forge */
+    --accent: #b8860b;         /* Or ancien */
+    --danger: #8b0000;         /* Sang de dragon */
+    --success: #2e8b57;        /* Vert des forêts nordiques */
+    --bg-main: #1a1410;        /* Nuit nordique */
+    --bg-panel: #2d2416;       /* Bois sombre de la forge */
+    --bg-card: #3a2f1e;        /* Pierre de la montagne */
+    --text-primary: #e8dcc0;   /* Parchemin ancien */
+    --text-secondary: #a89968; /* Or terni */
+}
+
+/* Fond avec texture de bois et runes */
+body {
+    background: 
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text x="10" y="30" font-family="serif" font-size="20" fill="rgba(212,175,55,0.05)">ᚠᚢᚦᚨᚱᚲ</text><text x="10" y="60" font-family="serif" font-size="20" fill="rgba(212,175,55,0.05)">ᚷᚹᚺᚾᛁᛃ</text><text x="10" y="90" font-family="serif" font-size="20" fill="rgba(212,175,55,0.05)">ᛈᛇᛉᛊᛏᛒ</text></svg>'),
+        linear-gradient(135deg, #1a1410 0%, #2d2416 50%, #1a1410 100%);
+    background-size: 200px 200px, 100% 100%;
+    background-position: 0 0, 0 0;
+    animation: runeScroll 60s linear infinite;
+}
+
+@keyframes runeScroll {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 200px 200px, 0 0; }
+}
+
+/* Effet de flammes de forge subtiles */
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(
+        to top,
+        rgba(212, 175, 55, 0.1) 0%,
+        rgba(184, 134, 11, 0.05) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+    animation: forgeGlow 4s ease-in-out infinite;
+}
+
+@keyframes forgeGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+/* Titre avec effet de métal forgé */
+h1 {
+    text-shadow: 
+        0 0 10px rgba(212, 175, 55, 0.8),
+        0 0 20px rgba(212, 175, 55, 0.5),
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 -2px 1px rgba(255, 255, 255, 0.3);
+    letter-spacing: 8px;
+    position: relative;
+}
+
+/* Panels avec bordures de forge */
+.panel {
+    background: linear-gradient(
+        135deg,
+        rgba(45, 36, 22, 0.95) 0%,
+        rgba(58, 47, 30, 0.9) 100%
+    );
+    border: 3px solid;
+    border-image: linear-gradient(
+        45deg,
+        var(--primary) 0%,
+        var(--secondary) 50%,
+        var(--primary) 100%
+    ) 1;
+    border-radius: 0 !important;
+    box-shadow: 
+        0 0 30px rgba(212, 175, 55, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.5),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.panel::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(
+        45deg,
+        rgba(212, 175, 55, 0.2),
+        transparent 30%,
+        transparent 70%,
+        rgba(212, 175, 55, 0.2)
+    );
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.panel:hover::before {
+    opacity: 1;
+}
+
+/* Effet de coins en métal */
+.panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid var(--primary);
+    border-left: 3px solid var(--primary);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}
+
+/* Header avec effet de bannière nordique */
+header {
+    background: linear-gradient(
+        135deg,
+        rgba(45, 36, 22, 0.95) 0%,
+        rgba(58, 47, 30, 0.9) 50%,
+        rgba(45, 36, 22, 0.95) 100%
+    );
+    border: 4px solid;
+    border-image: linear-gradient(
+        90deg,
+        var(--secondary) 0%,
+        var(--primary) 20%,
+        var(--primary) 80%,
+        var(--secondary) 100%
+    ) 1;
+    border-radius: 0 !important;
+    box-shadow: 
+        0 0 40px rgba(212, 175, 55, 0.4),
+        inset 0 0 30px rgba(0, 0, 0, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Motif de tissage nordique */
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 10px,
+            rgba(212, 175, 55, 0.05) 10px,
+            rgba(212, 175, 55, 0.05) 11px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 10px,
+            rgba(212, 175, 55, 0.05) 10px,
+            rgba(212, 175, 55, 0.05) 11px
+        );
+    pointer-events: none;
+}
+
+/* Boutons style runes gravées */
+.btn-primary {
+    background: linear-gradient(
+        135deg,
+        var(--primary) 0%,
+        #b8860b 50%,
+        var(--primary) 100%
+    );
+    border-radius: 0 !important;
+    border: 2px solid var(--secondary);
+    color: #1a1410;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 0 rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(212, 175, 55, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    box-shadow: 
+        0 4px 0 rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(212, 175, 55, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(2px);
+    box-shadow: 
+        0 2px 0 rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* Quick action buttons avec effet de pierre runique */
+.quick-action-btn {
+    background: linear-gradient(
+        135deg,
+        rgba(58, 47, 30, 0.95) 0%,
+        rgba(45, 36, 22, 0.9) 100%
+    );
+    border: 2px solid var(--primary);
+    border-radius: 0 !important;
+    color: var(--primary);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+    transition: all 0.3s;
+}
+
+.quick-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(
+        circle,
+        rgba(212, 175, 55, 0.3) 0%,
+        transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.quick-action-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.quick-action-btn:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.3) 0%,
+        rgba(184, 134, 11, 0.2) 100%
+    );
+    border-color: var(--secondary);
+    box-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.6),
+        inset 0 0 15px rgba(212, 175, 55, 0.2);
+    transform: translateX(5px);
+}
+
+/* Preseed items avec effet de tablette runique */
+.preseed-item {
+    background: rgba(58, 47, 30, 0.8);
+    border-left: 4px solid transparent;
+    border-radius: 0 !important;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.preseed-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 0;
+    background: linear-gradient(
+        180deg,
+        var(--primary) 0%,
+        var(--secondary) 50%,
+        var(--primary) 100%
+    );
+    transition: height 0.3s;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.preseed-item:hover::before {
+    height: 100%;
+}
+
+.preseed-item:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(212, 175, 55, 0.2) 0%,
+        rgba(58, 47, 30, 0.8) 30%
+    );
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    transform: translateX(3px);
+}
+
+.preseed-item.active {
+    background: linear-gradient(
+        90deg,
+        rgba(212, 175, 55, 0.3) 0%,
+        rgba(58, 47, 30, 0.9) 40%
+    );
+    border-left-color: var(--primary);
+    box-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.5),
+        inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+/* Code editor avec effet de parchemin ancien */
+.code-editor {
+    background: linear-gradient(
+        135deg,
+        rgba(26, 20, 16, 0.98) 0%,
+        rgba(35, 28, 20, 0.95) 100%
+    );
+    border: 3px solid var(--primary);
+    border-radius: 0 !important;
+    color: #d4af37;
+    box-shadow: 
+        0 0 25px rgba(212, 175, 55, 0.4),
+        inset 0 0 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 80px rgba(212, 175, 55, 0.05);
+    text-shadow: 0 0 3px rgba(212, 175, 55, 0.3);
+}
+
+/* Stats avec effet de runes lumineuses */
+.stat-value {
+    color: var(--primary);
+    text-shadow: 
+        0 0 10px rgba(212, 175, 55, 0.8),
+        0 0 20px rgba(212, 175, 55, 0.5);
+    animation: runeGlow 3s ease-in-out infinite;
+}
+
+@keyframes runeGlow {
+    0%, 100% { 
+        text-shadow: 
+            0 0 10px rgba(212, 175, 55, 0.8),
+            0 0 20px rgba(212, 175, 55, 0.5);
+    }
+    50% { 
+        text-shadow: 
+            0 0 15px rgba(212, 175, 55, 1),
+            0 0 30px rgba(212, 175, 55, 0.7),
+            0 0 45px rgba(212, 175, 55, 0.4);
+    }
+}
+
+.stat-item {
+    border-radius: 0 !important;
+    border-left: 4px solid var(--primary);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Section titles avec effet de gravure */
+.section-title {
+    text-shadow: 
+        0 0 10px rgba(212, 175, 55, 0.6),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 3px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--primary) 0%,
+        var(--secondary) 50%,
+        transparent 100%
+    );
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Modal avec cadre de forge */
+.modal-content {
+    background: linear-gradient(
+        135deg,
+        rgba(45, 36, 22, 0.98) 0%,
+        rgba(58, 47, 30, 0.95) 100%
+    );
+    border: 4px solid;
+    border-image: linear-gradient(
+        45deg,
+        var(--primary) 0%,
+        var(--secondary) 25%,
+        var(--primary) 50%,
+        var(--secondary) 75%,
+        var(--primary) 100%
+    ) 1;
+    border-radius: 0 !important;
+    box-shadow: 
+        0 0 60px rgba(212, 175, 55, 0.6),
+        inset 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+/* Form inputs avec effet de métal poli */
+.form-input, .form-select {
+    background: linear-gradient(
+        135deg,
+        rgba(58, 47, 30, 0.95) 0%,
+        rgba(45, 36, 22, 0.9) 100%
+    );
+    border: 2px solid var(--primary);
+    border-radius: 0 !important;
+    color: var(--text-primary);
+    transition: all 0.3s;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--secondary);
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.15) 0%,
+        rgba(58, 47, 30, 0.95) 100%
+    );
+    box-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.5),
+        inset 0 0 10px rgba(212, 175, 55, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 3px rgba(212, 175, 55, 0.3);
+}
+
+/* Editor panel avec cadre de forge */
+.editor-panel {
+    border-radius: 0 !important;
+    border: 3px solid;
+    border-image: linear-gradient(
+        45deg,
+        var(--primary) 0%,
+        var(--secondary) 50%,
+        var(--primary) 100%
+    ) 1;
+}
+
+/* Config sections avec effet de pierre gravée */
+.config-section {
+    border-radius: 0 !important;
+    border-left: 4px solid var(--primary);
+    background: linear-gradient(
+        90deg,
+        rgba(212, 175, 55, 0.1) 0%,
+        transparent 10%
+    );
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.config-section-title {
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+    letter-spacing: 2px;
+}

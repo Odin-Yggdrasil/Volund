@@ -1,0 +1,73 @@
+/* VOLUND - Thème Nordic */
+
+:root {
+    --primary: #88c0d0;
+    --secondary: #81a1c1;
+    --accent: #b48ead;
+    --danger: #bf616a;
+    --success: #a3be8c;
+    --bg-main: #2e3440;
+    --bg-panel: #3b4252;
+    --bg-card: #434c5e;
+    --text-primary: #eceff4;
+    --text-secondary: #d8dee9;
+}
+
+body {
+    background: linear-gradient(135deg, #2e3440 0%, #3b4252 50%, #2e3440 100%);
+}
+
+body::before {
+    display: none;
+}
+
+.panel {
+    background: rgba(59, 66, 82, 0.8);
+    border: 1px solid rgba(136, 192, 208, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #88c0d0, #5e81ac);
+}
+
+.quick-action-btn {
+    background: #434c5e;
+    border: 1px solid #88c0d0;
+}
+
+.quick-action-btn:hover {
+    background: rgba(136, 192, 208, 0.2);
+}
+
+.preseed-item {
+    background: #434c5e;
+}
+
+.preseed-item:hover {
+    background: rgba(136, 192, 208, 0.1);
+}
+
+.preseed-item.active {
+    background: rgba(136, 192, 208, 0.2);
+    border-left-color: #88c0d0;
+}
+
+.code-editor {
+    background: #2e3440;
+    border: 1px solid rgba(136, 192, 208, 0.3);
+}
+
+h1 {
+    text-shadow: 0 0 15px rgba(136, 192, 208, 0.3);
+    animation: none;
+}
+
+.section-title::after {
+    box-shadow: none;
+}
+
+.stat-value {
+    text-shadow: none;
+    animation: none;
+}

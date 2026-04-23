@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOLUND - Gestionnaire Preseed Debian</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="themes/base.css">
+    <link id="theme-css" rel="stylesheet" href="themes/cyberpunk.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 30px;">
+                <img src="logo.png" alt="VOLUND Logo" style="height: 80px; width: auto;">
+                <h1>VOLUND</h1>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <!-- Stats -->
+                <div class="panel">
+                    <h3 class="section-title">Stats</h3>
+                    <div class="stat-item">
+                        <span>Preseeds</span>
+                        <span class="stat-value" id="preseed-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Déploiements</span>
+                        <span class="stat-value" id="deploy-count">0</span>
+                    </div>
+                </div>
+
+                <!-- Liste -->
+                <div class="panel">
+                    <h3 class="section-title">Preseeds</h3>
+                    <div class="preseed-list" id="preseed-list">
+                        <p style="text-align: center; color: var(--text-secondary);">Aucun preseed</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="panel">
+                    <h3 class="section-title">Actions</h3>
+                    <button class="quick-action-btn" onclick="openNewPreseedModal()">NOUVEAU</button>
+                    <button class="quick-action-btn" onclick="savePreseed()">SAUVEGARDER</button>
+                    <button class="quick-action-btn" onclick="deletePreseed()">SUPPRIMER</button>
+                </div>
+
+                <!-- Config Rapide -->
+                <div class="panel">
+                    <h3 class="section-title">Config Rapide</h3>
+                    <button class="quick-action-btn" onclick="toggleConfigPanel()">OUVRIR</button>
+                </div>
+
+                <!-- Thème -->
+                <div class="panel">
+                    <h3 class="section-title">Thème</h3>
+                    <select class="form-select" id="theme-selector">
+                        <option value="cyberpunk">Cyberpunk 2077</option>
+                    </select>
+                </div>
+            </aside>
+
+            <!-- MAIN -->
+            <main>
+                <div class="editor-panel">
+                    <div class="editor-header">
+                        <div class="editor-title" id="current-file">Nouveau Preseed</div>
+                    </div>
+                    <textarea class="code-editor" id="preseed-editor" placeholder="# Configuration Preseed Debian"></textarea>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Nouveau -->
+    <div class="modal" id="newPreseedModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Nouveau Preseed</h2>
+            <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" id="newPreseedName" placeholder="serveur.cfg">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-input" id="newPreseedDesc" placeholder="Serveur de production">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="createNewPreseed()">CRÉER</button>
+                <button class="btn btn-secondary" onclick="closeModal('newPreseedModal')">ANNULER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Config Rapide -->
+    <div class="modal" id="configModal">
+        <div class="modal-content" style="max-width: 900px; max-height: 80vh; overflow-y: auto;">
+            <h2 class="modal-title">Configuration Rapide</h2>
+            
+            <div class="config-section">
+                <div class="config-section-title">Localisation</div>
+                <div class="form-row">
+                    <div class="form-group-small">
+                        <label class="form-label">Locale</label>
+                        <select class="form-select" id="cfg-locale">
+                            <option value="fr_FR.UTF-8">Français (FR)</option>
+                            <option value="en_US.UTF-8">English (US)</option>
+                            <option value="de_DE.UTF-8">Deutsch (DE)</option>
+                        </select>
+                    </div>
+                    <div class="form-group-small">
+                        <label class="form-label">Clavier</label>
+                        <select class="form-select" id="cfg-keyboard">
+                            <option value="fr">Français</option>
+                            <option value="us">US</option>
+                            <option value="de">Allemand</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-section-title">Réseau</div>
+                <div class="form-row">
+                    <div class="form-group-small">
+                        <label class="form-label">Hostname</label>
+                        <input type="text" class="form-input" id="cfg-hostname" value="debian-server">
+                    </div>
+                    <div class="form-group-small">
+                        <label class="form-label">Domaine</label>
+                        <input type="text" class="form-input" id="cfg-domain" value="local">
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-section-title">Utilisateur</div>
+                <div class="form-row">
+                    <div class="form-group-small">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="cfg-username" value="user">
+                    </div>
+                    <div class="form-group-small">
+                        <label class="form-label">Nom complet</label>
+                        <input type="text" class="form-input" id="cfg-fullname" value="Utilisateur">
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-section-title">Partitionnement</div>
+                <div class="form-group-small">
+                    <label class="form-label">Méthode</label>
+                    <select class="form-select" id="cfg-partmethod">
+                        <option value="regular">Disque entier</option>
+                        <option value="lvm">LVM</option>
+                        <option value="crypto">Chiffré (LUKS)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-section-title">Paquets</div>
+                <div class="form-group-small">
+                    <label class="form-label">Logiciels supplémentaires</label>
+                    <input type="text" class="form-input" id="cfg-packages" placeholder="vim curl wget git" value="vim curl wget git htop sudo">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="applyQuickConfig()">APPLIQUER</button>
+                <button class="btn btn-secondary" onclick="closeModal('configModal')">FERMER</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'api/';
+        let currentPreseed = null;
+        let preseeds = [];
+
+        // Init
+        window.addEventListener('load', () => {
+            loadAvailableThemes();
+            loadSavedTheme();
+            loadStats();
+            loadPreseedList();
+            
+            document.getElementById('theme-selector').addEventListener('change', function() {
+                changeTheme(this.value);
+            });
+        });
+
+        // Détecter automatiquement les thèmes disponibles
+        async function loadAvailableThemes() {
+            try {
+                const response = await fetch('themes/');
+                const html = await response.text();
+                
+                // Parser le HTML pour trouver les fichiers .css
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = doc.querySelectorAll('a');
+                
+                const themes = [];
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href.endsWith('.css') && href !== 'base.css') {
+                        const themeName = href.replace('.css', '');
+                        themes.push(themeName);
+                    }
+                });
+                
+                // Si on ne peut pas lister le dossier, utiliser l'API alternative
+                if (themes.length === 0) {
+                    loadThemesFromAPI();
+                } else {
+                    populateThemeSelector(themes);
+                }
+            } catch (error) {
+                console.log('Listing themes via fetch failed, trying API...');
+                loadThemesFromAPI();
+            }
+        }
+
+        // Méthode alternative : créer une API pour lister les thèmes
+        async function loadThemesFromAPI() {
+            try {
+                const response = await fetch(API_URL + 'themes');
+                const data = await response.json();
+                
+                if (data.success && data.themes) {
+                    populateThemeSelector(data.themes);
+                } else {
+                    // Fallback : thèmes par défaut
+                    populateThemeSelector(['cyberpunk', 'light', 'dark', 'nordic']);
+                }
+            } catch (error) {
+                // Fallback : thèmes par défaut
+                populateThemeSelector(['cyberpunk', 'light', 'dark', 'nordic']);
+            }
+        }
+
+        // Remplir le sélecteur de thèmes
+        function populateThemeSelector(themes) {
+            const selector = document.getElementById('theme-selector');
+            selector.innerHTML = '';
+            
+            // Noms affichés pour les thèmes connus
+            const themeNames = {
+                'cyberpunk': 'Cyberpunk 2077',
+                'light': 'Clair',
+                'dark': 'Sombre',
+                'nordic': 'Nordique'
+            };
+            
+            themes.forEach(theme => {
+                const option = document.createElement('option');
+                option.value = theme;
+                option.textContent = themeNames[theme] || theme.charAt(0).toUpperCase() + theme.slice(1);
+                selector.appendChild(option);
+            });
+            
+            // Restaurer le thème sauvegardé
+            const savedTheme = localStorage.getItem('volund-theme') || 'cyberpunk';
+            if (themes.includes(savedTheme)) {
+                selector.value = savedTheme;
+            }
+        }
+
+        // Thème
+        function changeTheme(theme) {
+            document.getElementById('theme-css').href = `themes/${theme}.css`;
+            localStorage.setItem('volund-theme', theme);
+            showNotification('✓ Thème appliqué', 'success');
+        }
+
+        function loadSavedTheme() {
+            const theme = localStorage.getItem('volund-theme') || 'cyberpunk';
+            document.getElementById('theme-css').href = `themes/${theme}.css`;
+            document.getElementById('theme-selector').value = theme;
+        }
+
+        // Stats
+        async function loadStats() {
+            try {
+                const res = await fetch(API_URL + 'stats');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('preseed-count').textContent = data.stats.total_preseeds;
+                    document.getElementById('deploy-count').textContent = data.stats.total_deployments || 0;
+                }
+            } catch (e) {}
+        }
+
+        // Liste
+        async function loadPreseedList() {
+            try {
+                const res = await fetch(API_URL + 'preseeds');
+                const data = await res.json();
+                
+                if (data.success) {
+                    preseeds = data.preseeds;
+                    renderList();
+                }
+            } catch (e) {}
+        }
+
+        function renderList() {
+            const container = document.getElementById('preseed-list');
+            
+            if (preseeds.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary)">Aucun preseed</p>';
+                return;
+            }
+            
+            container.innerHTML = preseeds.map(p => `
+                <div class="preseed-item" onclick="loadPreseedContent('${p.filename}')">
+                    <div class="preseed-name">${p.filename}</div>
+                    <div class="preseed-meta">${p.debian_version || 'Debian 12'}</div>
+                </div>
+            `).join('');
+            
+            if (preseeds.length > 0 && !currentPreseed) {
+                loadPreseedContent(preseeds[0].filename);
+            }
+        }
+
+        async function loadPreseedContent(filename) {
+            try {
+                const res = await fetch(API_URL + 'preseed/' + filename);
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('preseed-editor').value = data.content;
+                    document.getElementById('current-file').textContent = filename;
+                    currentPreseed = filename;
+                    
+                    document.querySelectorAll('.preseed-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.textContent.includes(filename)) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            } catch (e) {}
+        }
+
+        // Modals
+        function openNewPreseedModal() {
+            document.getElementById('newPreseedModal').classList.add('active');
+        }
+
+        function toggleConfigPanel() {
+            document.getElementById('configModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        async function createNewPreseed() {
+            const name = document.getElementById('newPreseedName').value.trim();
+            const desc = document.getElementById('newPreseedDesc').value.trim();
+            
+            if (!name) {
+                showNotification('Nom requis', 'error');
+                return;
+            }
+            
+            const content = `# Configuration Preseed - ${name}
+# Généré par VOLUND
+
+#### Localisation
+d-i debian-installer/locale string fr_FR.UTF-8
+d-i keyboard-configuration/xkb-keymap select fr
+
+#### Réseau
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_hostname string debian-server
+d-i netcfg/get_domain string local
+
+#### Comptes
+d-i passwd/root-login boolean true
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string Utilisateur
+d-i passwd/username string user
+
+#### Horloge
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Paris
+d-i clock-setup/ntp boolean true
+
+#### Partitionnement
+d-i partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+#### Paquets
+tasksel tasksel/first multiselect standard, ssh-server
+d-i pkgsel/include string vim curl wget git htop sudo
+d-i pkgsel/upgrade select full-upgrade
+
+#### GRUB
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/bootdev string default
+
+#### Finalisation
+d-i finish-install/reboot_in_progress note
+`;
+            
+            try {
+                const res = await fetch(API_URL + 'preseeds', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: name, content, description: desc })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    showNotification('✓ Créé', 'success');
+                    closeModal('newPreseedModal');
+                    document.getElementById('newPreseedName').value = '';
+                    document.getElementById('newPreseedDesc').value = '';
+                    loadPreseedList();
+                    loadStats();
+                } else {
+                    showNotification('Erreur: ' + data.error, 'error');
+                }
+            } catch (e) {
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        async function savePreseed() {
+            if (!currentPreseed) {
+                showNotification('Aucun preseed sélectionné', 'error');
+                return;
+            }
+            
+            const content = document.getElementById('preseed-editor').value;
+            
+            try {
+                const res = await fetch(API_URL + 'preseed/' + currentPreseed, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    showNotification('✓ Sauvegardé', 'success');
+                } else {
+                    showNotification('Erreur: ' + data.error, 'error');
+                }
+            } catch (e) {
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        async function deletePreseed() {
+            if (!currentPreseed) {
+                showNotification('Aucun preseed sélectionné', 'error');
+                return;
+            }
+            
+            if (!confirm('Supprimer ' + currentPreseed + ' ?')) return;
+            
+            try {
+                const res = await fetch(API_URL + 'preseed/' + currentPreseed, { method: 'DELETE' });
+                const data = await res.json();
+                
+                if (data.success) {
+                    showNotification('✓ Supprimé', 'success');
+                    currentPreseed = null;
+                    document.getElementById('preseed-editor').value = '';
+                    document.getElementById('current-file').textContent = 'Nouveau Preseed';
+                    loadPreseedList();
+                    loadStats();
+                } else {
+                    showNotification('Erreur: ' + data.error, 'error');
+                }
+            } catch (e) {
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        // Config rapide
+        function applyQuickConfig() {
+            const locale = document.getElementById('cfg-locale').value;
+            const keyboard = document.getElementById('cfg-keyboard').value;
+            const hostname = document.getElementById('cfg-hostname').value;
+            const domain = document.getElementById('cfg-domain').value;
+            const username = document.getElementById('cfg-username').value;
+            const fullname = document.getElementById('cfg-fullname').value;
+            const partmethod = document.getElementById('cfg-partmethod').value;
+            const packages = document.getElementById('cfg-packages').value;
+            
+            const preseed = `# Configuration Preseed
+# Généré par VOLUND - Configuration Rapide
+
+#### Localisation
+d-i debian-installer/locale string ${locale}
+d-i keyboard-configuration/xkb-keymap select ${keyboard}
+
+#### Réseau
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_hostname string ${hostname}
+d-i netcfg/get_domain string ${domain}
+
+#### Comptes utilisateurs
+d-i passwd/root-login boolean true
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string ${fullname}
+d-i passwd/username string ${username}
+
+#### Horloge et fuseau horaire
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Paris
+d-i clock-setup/ntp boolean true
+
+#### Partitionnement
+d-i partman-auto/method string ${partmethod}
+d-i partman-auto/choose_recipe select atomic
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+#### Sélection des paquets
+tasksel tasksel/first multiselect standard, ssh-server
+d-i pkgsel/include string ${packages}
+d-i pkgsel/upgrade select full-upgrade
+
+#### Configuration GRUB
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/bootdev string default
+
+#### Finalisation
+d-i finish-install/reboot_in_progress note
+`;
+            
+            document.getElementById('preseed-editor').value = preseed;
+            closeModal('configModal');
+            showNotification('✓ Configuration appliquée', 'success');
+        }
+
+        // Notifications
+        function showNotification(msg, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = msg;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => notif.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
